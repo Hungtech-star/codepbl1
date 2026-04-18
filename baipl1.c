@@ -500,21 +500,54 @@ int main(void) {
         printf("Số lượng đỉnh quá lớn, không thể giải bằng QHD+BMask\n");
         return 0;
     }
-    struct Result *result= (struct Result*)malloc(sizeof(struct Result));
-    result->path = (struct ResultWay*)malloc(sizeof(struct ResultWay));
+    int choice;
 
-    solve_QDH_BMask(&DataIn, result);
-    //free memory
-    free(result);
+do {
+    printf("\n============= MENU =============\n");
+    printf("1. QHD + Bitmask\n");
+    printf("2. Backtracking (Quay lui)\n");
+    printf("3. Nhanh canh (Branch & Bound)\n");
+    printf("0. Thoat\n");
+    printf("================================\n");
+    printf("Nhap lua chon: ");
+    scanf("%d", &choice);
 
-    //solve backtracking
-    solve_backtracking(&DataIn);
+    switch(choice) {
+        case 1: {
+            struct Result *result = (struct Result*)malloc(sizeof(struct Result));
+            result->path = (struct ResultWay*)malloc(sizeof(struct ResultWay));
 
-    //solve
-    struct Result *result2= (struct Result*)malloc(sizeof(struct Result));
-    result2->path = (struct ResultWay*)malloc(sizeof(struct ResultWay));
-    NhanhCanh(&DataIn,result2);
-    free(result2);
+            solve_QDH_BMask(&DataIn, result);
+
+            free(result->path);
+            free(result);
+            break;
+        }
+
+        case 2:
+            solve_backtracking(&DataIn);
+            break;
+
+        case 3: {
+            struct Result *result2 = (struct Result*)malloc(sizeof(struct Result));
+            result2->path = (struct ResultWay*)malloc(sizeof(struct ResultWay));
+
+            NhanhCanh(&DataIn, result2);
+
+            free(result2->path);
+            free(result2);
+            break;
+        }
+
+        case 0:
+            printf("\nThoat chuong trinh.\n");
+            break;
+
+        default:
+            printf("\nLua chon khong hop le!\n");
+    }
+
+} while (choice != 0);
 
 
 
